@@ -19,6 +19,7 @@
   "homepage": "https://github.com/careylzh/prismatutorial#readme",
   "dependencies": {
     "@prisma/client": "^3.9.1",
+    "body-parser": "^1.19.2",
     "express": "^4.17.2"
   },
   "devDependencies": {
