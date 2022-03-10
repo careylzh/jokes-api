@@ -8,4 +8,30 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+//db models, can only be defined in the same schema file
+
+//usually table names are singular by convention
+
+//joke. a single joke has a single user
+model Joke {
+  id   String @id @default(cuid())
+  text String @db.VarChar() //VarChar is a database type, quite universal across relational databases. VarChar is just a large string
+  //we are creating a field named creator of the User model type
+  //(User model is defined below )
+  //field created (creator) points to a field that lives inside this model: userId
+  //field created doesn't actually exist as a column in the Joke table- it's a "virtual" field that relates to the userId field
+  //"references: [id]" references the id field in the 
+  //purpose of the virtual field creator to relate field userId in model Joke
+  //result: each joke has a a corresponding userId which references the field id in model User
+  creator User   @relation(fields: [userId], references: [id])
+  userId  String
+}
+
+//user. a single user can have many jokes. a single joke has a single user
+model User {
+  id    String @id @default(cuid())
+  jokes Joke[] //jokes field, an array of Joke objects. So each user can have multiple jokes. An example of how Prisma encourages thinking in objects instead of mapping relation data cuz you don't have to write the relation here
 }
